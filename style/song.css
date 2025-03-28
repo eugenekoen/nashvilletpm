@@ -12,6 +12,14 @@ body {
     font: normal 11px sans-serif
 }
 
+span.chord {
+    color: #2159D6;
+    /* Or your preferred shade of blue */
+    font-weight: bold;
+    /* Makes chords stand out */
+    /* Add any other styles you want for chords */
+}
+
 /* SOMETHING NEW */
 @media print {
     .transpose-keys {

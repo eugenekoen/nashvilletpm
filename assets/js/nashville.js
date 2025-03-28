@@ -133,7 +133,7 @@ function convertNNSToChords(nnsString, targetKey)
     // - (maj|min|m|dim|sus|aug|add|[-+Δ°ø]?\d+)* : Modifiers (m, 7, maj7, sus4, dim, etc.) - non-capturing group * makes it optional
     // - (?:\/(b?#?[1-7]))? : Optional slash chord part (e.g., /5, /b3) - non-capturing group ? makes it optional
     // - \b : Word boundaries to avoid matching numbers within words
-    const nnsRegex = /\b(b?#?)([1-7])(maj|min|m|dim|sus|aug|add|[-+Δ°ø]?\d+)*?(?:\/(b?#?)(\d))?\b/g;
+    const nnsRegex = /(?<!Verse\s|Chorus\s|Bridge\s|Instrumental\s|Intro\s|Outro\s|Tag\s)\b(b?#?)([1-7])(maj|min|m|dim|sus|aug|add|[-+Δ°ø]?\d+)*?(?:\/(b?#?)(\d))?\b/gi;
 
 
     return nnsString.replace(nnsRegex, (match, accidental, numStr, modifiers, slashAccidental, slashNumStr) =>
@@ -208,7 +208,7 @@ function convertNNSToChords(nnsString, targetKey)
                 }
             }
 
-            return finalChord;
+            return `<span class="chord">${finalChord}</span>`;
 
         } catch (error)
         {
@@ -233,7 +233,7 @@ function displayConvertedSong(targetKey)
     if (!displayElement || !originalNnsContent) return;
 
     const chordedString = convertNNSToChords(originalNnsContent, targetKey);
-    displayElement.textContent = chordedString; // Update the <pre> tag content
+    displayElement.innerHTML = chordedString; // Update the <pre> tag content
 
     // Update selected key button style
     if (keysContainer)

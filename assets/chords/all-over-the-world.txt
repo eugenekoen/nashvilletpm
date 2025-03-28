@@ -1,86 +1,82 @@
-  A
   ALL OVER THE WORLD
   ------------------
 
   INTRO
   -----
-  A  Esus4  Dsus2
-  A  Esus4  Dsus2
-      
+  1  5sus4  4sus2
+  1  5sus4  4sus2
+
   VERSE 1
   -------
-  A                 A/B
+  1                 1/2
   Even As the World began
-      A/E                 Dsus2
+      1/5                 4sus2
   The stars they sang and all the angels
-  Esus4       Dsus2
+  5sus4       4sus2
   Shouted for joy
-  Esus4       Dsus2
+  5sus4       4sus2
   Shouted for joy
-  A                        A/B
+  1                        1/2
   And looking back through history
-          A/E               Dsus2
+          1/5               4sus2
   Your people they have always had
-      Esus4          Dsus2
+      5sus4          4sus2
   A song they must sing
-      Esus4          Dsus2
+      5sus4          4sus2
   A song they must sing
-      
+
   PRE-CHORUS
   ----------
-  Bm7        A/E       D
+  2m7        1/5       4
   We Are The People of God
-  F#m7            E/G#
+  6m7             5/7
   We'll Sing Your Song
-  Gsus2            D/F#
+  b7sus2            4/6
   Here on the earth
-      
+
   CHORUS
   ------
-                  A                    Bm
+                  1                    2m
   All over the world Your song will resound
-                  G                          D
+                  b7                          4
   All over the world Your praises ring out
-                  A                         Bm  
+                  1                         2m
   We're living to see You're name and renown
-                  G    D
+                  b7    4
   All over the world
-      
+
   VERSE 2
   -------
-  A              A/B
+  1              1/2
   Young and old, near and far
-          A/E            Dsus2
+          1/5            4sus2
   There's a place for ev'ry heart to
-  Esus4        Dsus2
+  5sus4        4sus2
   Join in your song
-  Esus4        Dsus2
+  5sus4        4sus2
   Join in your song
-  A                 A/B
+  1                 1/2
   And ev'ry nation, tribe and tongue
-  A/E           Dsus2
+  1/5           4sus2
   Come together join as one
-  Esus4         Dsus2
+  5sus4         4sus2
   Give glory to God
-  Esus4    Dsus2
+  5sus4    4sus2
   Glory to God
-      
+
   BRIDGE
   ------
-  G
+  b7
   Great is Your name
-      D/F#               A
-  And great will be your song 
-  G
+      4/6               1
+  And great will be your song
+  b7
   Great is Your name
-      D/F#               A
-  And great will be your song 
-      G
+      4/6               1
+  And great will be your song
+      b7
   We lift up our hands and pray
-      D/F#
+      4/6
   We lift up our hands and pray
-      D/F#
+      4/6
   For holy is Your name
-
-            
-  
