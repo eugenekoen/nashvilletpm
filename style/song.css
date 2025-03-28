@@ -1,0 +1,36 @@
+body {
+    background-color: rgb(180, 235, 180);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 17px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.transpose-keys {
+    margin: 10px 0;
+    overflow: auto;
+    font: normal 11px sans-serif
+}
+
+/* SOMETHING NEW */
+@media print {
+    .transpose-keys {
+        display: none;
+    }
+}
+
+#slider-container {
+    padding-left: 10px;
+    display: flex;
+    flex-direction: row;
+    /* Display slider and code side by side */
+    align-items: flex-start;
+    /* Align the slider to the top */
+}
+
+#scroll-speed {
+    writing-mode: bt-lr;
+    /* Set writing mode for vertical orientation */
+    margin-left: 10px;
+    /* Add some spacing between the slider and the code */
+}

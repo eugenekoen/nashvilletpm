@@ -1,0 +1,13 @@
+Amazing Grace (NNS)
+--------------------
+Key: G (This line is informational only for humans, the script doesn't use it)
+
+[Verse 1]
+1                      4
+Amazing grace how sweet the sound
+     1              5
+That saved a wretch like me
+  1                4
+I once was lost but now am found
+    1       5       1
+Was blind but now I see

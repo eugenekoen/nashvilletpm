@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turningpoint Musos</title>
+
+    <!-- Stylesheets -->
+    <link rel="shortcut icon" href="./style/images/LOGO.jpg" />
+    <link rel="stylesheet" href="./style/mainapp.css">
+    <!-- Use the same CSS for key button styling -->
+    <link rel="stylesheet" href="./style/jquery.transposer.css">
+    <!-- ---------------- -->
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <!-- ---------- -->
+
+    <!-- Scripts -->
+    <!-- Keep jQuery if needed for search or other features -->
+    <script type="text/javascript" src="./assets/jquery/jquery.min.js"></script>
+    <!-- REMOVED: <script type="text/javascript" src="./assets/jquery/jquery.transposer.js"></script> -->
+    <!------------------>
+
+</head>
+
+<body>
+    <div id="navigation">
+        <div id="textdiv">
+            TURNING POINT MUSOS
+        </div>
+    </div>
+
+    <div>
+        <!-- Your Table One (SONG LIST) Here -->
+        <table id="tableone">
+            <caption>SONG LIST</caption>
+            <thead>
+                <tr>
+                    <td>NAME OF SONG</td>
+                    <td>CHORDS</td>
+                    <td>LYRICS</td>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Example Song Entry (Add your actual songs) -->
+                <tr>
+                    <td>Amazing Grace (NNS Example)</td>
+                    <!-- Update data-song-name to your NNS file name -->
+                    <td><a href="#" data-song-name="amazing-grace-nns" data-content-type="chords"
+                            data-target="song-content">Chords</a></td>
+                    <td><a href="#" data-song-name="amazing-grace-nns" data-content-type="lyrics"
+                            data-target="song-content">Lyrics</a></td>
+                </tr>
+                <tr>
+                    <td>God Is Great (NNS Example)</td>
+                    <!-- Update data-song-name to your NNS file name -->
+                    <td><a href="#" data-song-name="god-is-great-nns" data-content-type="chords"
+                            data-target="song-content">Chords</a></td>
+                    <td><a href="#" data-song-name="god-is-great-nns" data-content-type="lyrics"
+                            data-target="song-content">Lyrics</a></td>
+                </tr>
+                <!-- Add other songs from your list -->
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <input id="myInput" onkeyup="myFunction()" placeholder="Search for a song name" type="text">
+        <!-- Your Table Two (SONG DATABASE) Here -->
+        <table id="tabletwo">
+            <caption>SONG DATABASE</caption>
+            <thead>
+                <tr>
+                    <td>NAME OF SONG</td>
+                    <td>CHORDS</td>
+                    <td>LYRICS</td>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Example Song Entry (Add your actual songs) -->
+                <tr>
+                    <td>Amazing Grace (NNS Example)</td>
+                    <!-- Update data-song-name to your NNS file name -->
+                    <td><a href="#" data-song-name="amazing-grace-nns" data-content-type="chords"
+                            data-target="song-content">Chords</a></td>
+                    <td><a href="#" data-song-name="amazing-grace-nns" data-content-type="lyrics"
+                            data-target="song-content">Lyrics</a></td>
+                </tr>
+                <tr>
+                    <td>God Is Great (NNS Example)</td>
+                    <!-- Update data-song-name to your NNS file name -->
+                    <td><a href="#" data-song-name="god-is-great-nns" data-content-type="chords"
+                            data-target="song-content">Chords</a></td>
+                    <td><a href="#" data-song-name="god-is-great-nns" data-content-type="lyrics"
+                            data-target="song-content">Lyrics</a></td>
+                </tr>
+                <!-- Add ALL other songs from your database list -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Search function - Requires jQuery
+        function myFunction()
+        {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("tabletwo");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++)
+            {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td)
+                {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1)
+                    {
+                        tr[i].style.display = "";
+                    } else
+                    {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        // Fetching and Redirection Logic (Keep As Is)
+        document.addEventListener('DOMContentLoaded', function ()
+        {
+            var songLinks = document.querySelectorAll('table a');
+            songLinks.forEach(link => link.addEventListener('click', handleSongClick));
+
+            function handleSongClick(event)
+            {
+                event.preventDefault(); // Prevent default link behavior
+                var songName = event.target.dataset.songName;
+                var contentType = event.target.dataset.contentType; // 'chords' or 'lyrics'
+                // Assuming 'chords' files contain NNS, 'lyrics' might just be words
+                // Adjust URL path as necessary
+                var songURL = `./assets/${contentType}/${songName}.txt`;
+                var templateURL = "./assets/master/template.html"; // Path to your template file
+
+                // Fetch the song content (NNS or lyrics)
+                fetch(songURL)
+                    .then(response =>
+                    {
+                        if (!response.ok)
+                        {
+                            // Try fetching from the root if not found in assets/chords or assets/lyrics
+                            songURL = `./${songName}.txt`;
+                            return fetch(songURL).then(res =>
+                            {
+                                if (!res.ok) throw new Error(`Failed to load song content for ${songName} from multiple paths`);
+                                return res.text();
+                            });
+                        }
+                        return response.text();
+                    })
+                    .then(songContent =>
+                    {
+                        // Store content in sessionStorage for template.html to access
+                        // Using sessionStorage is often cleaner than huge URL parameters
+                        sessionStorage.setItem('songData', JSON.stringify({
+                            name: songName,
+                            type: contentType,
+                            content: songContent
+                        }));
+                        // Navigate to template.html
+                        window.location.href = templateURL;
+                    })
+                    .catch(error =>
+                    {
+                        console.error("Error loading song: ", error);
+                        // Display error nicely if needed
+                        alert(`Error loading content: ${error.message}`);
+                    });
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
