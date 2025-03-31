@@ -1,72 +1,71 @@
-  G
-  GRATITUDE
-  ==========================
-  VERSE 1
-  -------
-         G
-  All my words fall short
-         Em
-  I got nothing new
-            D
-  How could I express
-        C
-  All my gratitude?
+================================================
+   GRATITUDE
+   ==========================
+   VERSE 1
+   -------
+          1
+   All my words fall short
+          6m
+   I got nothing new
+             5
+   How could I express
+         4
+   All my gratitude?
    
-  VERSE 2
-  -------
-          G
-  I could sing these songs
-       Em
-  As I often do
-            D
-  But every song must end
-         C
-  And You never do
+   VERSE 2
+   -------
+           1
+   I could sing these songs
+        6m
+   As I often do
+             5
+   But every song must end
+          4
+   And You never do
    
-  CHORUS
-  ------
-       G                                            D
-  So I throw up my hands and praise You again and again
+   CHORUS
+   ------
+        1                                            5
+   So I throw up my hands and praise You again and again
    
-  'Cause all that I have is a
-  C            Em   D
-  Hallelujah   Hallelujah
-
-        G                                                  D
-  And I know it's not much but I've nothing else fit for a King
+   'Cause all that I have is a
+   4            6m   5
+   Hallelujah   Hallelujah
    
-  Except for a heart singing
-  C           Em   D  G
-  Hallelujah  Hallelujah
+         1                                                  5
+   And I know it's not much but I've nothing else fit for a King
    
-  VERSE 3
-  -------
-           G
-  I've got one response
-           Em
-  I've got just one move
-          D
-  With my arm stretched wide
-        C
-  I will worship You   
+   Except for a heart singing
+   4           6m   5  1
+   Hallelujah  Hallelujah
    
-  BRIDGE
-  ------
-     G
-  So come on, my soul
+   VERSE 3
+   -------
+            1
+   I've got one response
+            6m
+   I've got just one move
+           5
+   With my arm stretched wide
+         4
+   I will worship You
    
-  Oh, don't you get shy on me
-  D
-  Lift up your song
-                             C
-  'Cause you've got a lion inside of those lungs
-                        G  D
-  Get up and praise the Lord   
+   BRIDGE
+   ------
+      1
+   So come on, my soul
    
-  INTERLUDE
-  ---------
-  C  C  C  C  Em  Em  D  D
-
+   Oh, don't you get shy on me
+   5
+   Lift up your song
+                              4
+   'Cause you've got a lion inside of those lungs
+                         1  5
+   Get up and praise the Lord
+   
+   INTERLUDE
+   ---------
+   4  4  4  4  6m  6m  5  5
   ================================================
 
   
