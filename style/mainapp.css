@@ -199,3 +199,69 @@ input {
 }
 
 /* TESTING TESTING */
+
+/* --- Mobile-Specific Styles using Media Query --- */
+@media (max-width: 767px) {
+
+    /* Adjust modal for smaller screens */
+    .modal {
+        padding-top: 10px;
+        /* Reduce padding at the top */
+    }
+
+    .modal-content {
+        width: 95%;
+        /* Take up almost the entire screen width */
+        margin: 2% auto;
+        /* Reduce margin */
+        padding: 15px;
+        font-size: 15px;
+        /* Slightly increase font size for readability */
+    }
+
+    /* Make the close button larger and easier to tap */
+    .close-modal-btn {
+        font-size: 36px;
+        padding: 5px;
+        /* Increase padding around the X */
+    }
+
+    /* Adjustments for inner elements (prevent overflow) */
+    #add-song-section label {
+        display: block;
+        /* Stack labels on top on mobile */
+        width: 100%;
+        margin-bottom: 3px;
+    }
+
+    #add-song-section select,
+    #add-song-section button {
+        width: 100%;
+        /* Make select and button full width */
+        box-sizing: border-box;
+        /* Include padding and border in element's total width and height */
+    }
+
+    /* Adjust padding/margins in list items to prevent overflowing content */
+    #current-setlist-items li {
+        padding: 10px 5px;
+        flex-wrap: wrap;
+        /* Allows content to wrap on small screens */
+    }
+
+    #current-setlist-items li span {
+        margin-right: 5px;
+        /* Reduce margin */
+        flex-basis: 100%;
+        /* Take full width for span */
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .remove-song-btn {
+        width: 100%;
+        /* Make Remove button full width and centered */
+        font-size: 16px;
+        padding: 8px;
+    }
+}
