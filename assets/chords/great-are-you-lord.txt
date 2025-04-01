@@ -1,64 +1,63 @@
-  D
   GREAT ARE YOU LORD
   ------------------
 
   INTRO
   -----
-  Dadd9  F#m  E  
+  1add9  3m  2  
 
   Verse
   -----
-          Dadd9          F#m
+          1add9          3m
   You give life, You are love
-          E
+          2
   You bring light to the darkness
-          Dadd9        F#m
+          1add9        3m
   You give hope, You restore
-          E
+          2
   Every heart that is broken
-  Dadd9   F#m       E
+  1add9   3m       2
   Great are You, Lord
   
   CHORUS
   ------
-          Dadd9         F#m
+          1add9         3m
   It's Your breath in our lungs
-          E
+          2
   So we pour out our praise, we pour out our praise
-          Dadd9         F#m
+          1add9         3m
   It's Your breath in our lungs
-          E
+          2
   So we pour out our praise to You only
   
   VERSE
   -----
-          Dadd9          F#m
+          1add9          3m
   You give life, You are love
-          E
+          2
   You bring light to the darkness
-          Dadd9        F#m
+          1add9        3m
   You give hope, You restore
-          E
+          2
   Every heart that is broken
-  Dadd9   F#m      E
+  1add9   3m      2
   Great are You, Lord
   
   INSTRUMENTAL
   ------------
-  A   Asus   Dadd9   A
-  Bass (A    B    D    A)
+  5   5sus   1add9   5
+  Bass (5    6    1    5)
 
   BRIDGE
   ------
-  A 
+  5 
   All the earth will shout Your praise
-  Asus(Bass B)
+  5sus(Bass 6)
   Our hearts will cry, these bones will sing
-  Dadd9          A
+  1add9          5
   Great are You, Lord (Repeat 3x)
   
   ENDING
   ------
-  Dadd9  A  E
+  1add9  5  2
               
   

@@ -89,3 +89,113 @@ input {
 .clickable {
     cursor: pointer;
 }
+
+
+/* TESTING TESTING */
+/* Basic Modal Styling */
+.modal {
+    /* display: none; */
+    /* Managed by JS */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1000;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Black w/ opacity */
+    padding-top: 60px;
+    /* Location of the box */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    /* 5% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+    max-width: 600px;
+    /* Maximum width */
+    border-radius: 5px;
+    color: #333;
+    /* Text color inside modal */
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Close Button */
+.close-modal-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-modal-btn:hover,
+.close-modal-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Modal Sections */
+#current-setlist-items {
+    list-style: none;
+    padding: 0;
+}
+
+#current-setlist-items li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#current-setlist-items li span {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+#add-song-section div {
+    margin-bottom: 10px;
+}
+
+#add-song-section label {
+    display: inline-block;
+    width: 50px;
+    /* Adjust as needed */
+}
+
+#add-song-section select,
+#add-song-section button {
+    padding: 5px;
+    font-size: 14px;
+}
+
+.remove-song-btn {
+    background-color: #f44336;
+    /* Red */
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.remove-song-btn:hover {
+    background-color: #da190b;
+}
+
+/* TESTING TESTING */

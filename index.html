@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="./style/jquery.transposer.css">
     <!-- ---------------- -->
 
+    <!-- SUPABASE CLIENT -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <!-- Add this line -->
+
     <!-- Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
@@ -37,36 +40,77 @@
         </div>
     </div>
 
+    <!-- TESTING TESTING -->
+    <!-- Button to Open Setlist Modal -->
+    <div style="padding: 15px; text-align: center;"> <!-- Basic styling -->
+        <button id="open-setlist-modal-btn">Set List for this weekend</button>
+    </div>
+
+    <!-- Setlist Modal (Initially Hidden) -->
+    <div id="setlist-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal-btn">×</span>
+            <h2>Weekend Setlist Management</h2>
+
+            <div id="current-setlist-display">
+                <h3>Current Setlist:</h3>
+                <ul id="current-setlist-items">
+                    <!-- Populated by JavaScript -->
+                    <li>Loading...</li>
+                </ul>
+            </div>
+
+            <hr>
+
+            <div id="add-song-section">
+                <h3>Add Song:</h3>
+                <div>
+                    <label for="song-select-dropdown">Song:</label>
+                    <select id="song-select-dropdown">
+                        <option value="">-- Select a Song --</option>
+                        <!-- Options populated by JavaScript -->
+                    </select>
+                </div>
+                <div>
+                    <label for="key-select-dropdown">Key:</label>
+                    <select id="key-select-dropdown">
+                        <option value="C">C</option>
+                        <option value="Db">Db</option>
+                        <option value="D">D</option>
+                        <option value="Eb">Eb</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="Gb">Gb</option>
+                        <option value="G">G</option>
+                        <option value="Ab">Ab</option>
+                        <option value="A">A</option>
+                        <option value="Bb">Bb</option>
+                        <option value="B">B</option>
+                    </select>
+                </div>
+                <button id="add-song-to-setlist-btn">Add to Setlist</button>
+            </div>
+        </div>
+    </div>
+    <!-- --------------- -->
+
     <div>
-        <!-- Your Table One (SONG LIST) Here -->
+        <!-- Your Table One (SONG LIST) - Now dynamically populated -->
         <table id="tableone">
-            <caption>SONG LIST</caption>
+            <caption>SONG LIST (This Weekend's Setlist)</caption> <!-- Optional: Update caption -->
             <thead>
                 <tr>
                     <td>NAME OF SONG</td>
-                    <td>CHORDS</td>
+                    <td>CHORDS (Selected Key)</td> <!-- Optional: Update header -->
                     <td>LYRICS</td>
                 </tr>
             </thead>
             <tbody>
-                <!-- Example Song Entry (Add your actual songs) -->
+                <!-- This will be populated by JavaScript -->
+                <!-- You can leave a placeholder row if you like -->
                 <tr>
-                    <td>Amazing Grace (NNS Example)</td>
-                    <!-- Update data-song-name to your NNS file name -->
-                    <td><a href="#" data-song-name="amazing-grace-nns" data-content-type="chords"
-                            data-target="song-content">Chords</a></td>
-                    <td><a href="#" data-song-name="amazing-grace-nns" data-content-type="lyrics"
-                            data-target="song-content">Lyrics</a></td>
+                    <td colspan="3" style="text-align:center;">Loading setlist...</td>
                 </tr>
-                <tr>
-                    <td>God Is Great (NNS Example)</td>
-                    <!-- Update data-song-name to your NNS file name -->
-                    <td><a href="#" data-song-name="god-is-great-nns" data-content-type="chords"
-                            data-target="song-content">Chords</a></td>
-                    <td><a href="#" data-song-name="god-is-great-nns" data-content-type="lyrics"
-                            data-target="song-content">Lyrics</a></td>
-                </tr>
-                <!-- Add other songs from your list -->
             </tbody>
         </table>
     </div>
@@ -1253,14 +1297,513 @@
     </div>
 
     <script>
-        // Search function - Requires jQuery
+
+        // --- SUPABASE INTEGRATION ---
+
+        // Replace with YOUR Supabase URL and Anon Key
+        const SUPABASE_URL = 'https://hjnewoghwyecmgmjsxgn.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqbmV3b2dod3llY21nbWpzeGduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM1MDU5ODEsImV4cCI6MjA1OTA4MTk4MX0.lzs2Ol0tUWzk0-m-gQHBRPsOjWLBKA0bhImOixFeoUY';
+
+        // Initialize Supabase client
+        let supabase = null;
+        // Check if the Supabase library object exists globally before trying to use it
+        if (SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase)
+        {
+            try
+            {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log("Supabase client initialized.");
+            } catch (e)
+            {
+                console.error("Error initializing Supabase client:", e);
+                supabase = null; // Ensure it's null if init fails
+            }
+        } else
+        {
+            console.error("Supabase URL or Anon Key missing, or Supabase client library not loaded.");
+            // Optionally disable setlist features if Supabase isn't configured
+            const openBtn = document.getElementById('open-setlist-modal-btn');
+            if (openBtn)
+            {
+                openBtn.disabled = true;
+                openBtn.textContent = "Setlist Disabled (Config Error)";
+            }
+        }
+
+        let currentSetlist = []; // In-memory cache of the setlist
+        const setlistLabel = 'current_weekend'; // The label used in the database
+
+        // --- Modal Elements ---
+        // Get elements safely, checking if they exist
+        const modal = document.getElementById('setlist-modal');
+        const openModalBtn = document.getElementById('open-setlist-modal-btn');
+        const closeModalBtn = modal ? modal.querySelector('.close-modal-btn') : null;
+        const currentSetlistItemsUl = document.getElementById('current-setlist-items');
+        const songSelectDropdown = document.getElementById('song-select-dropdown');
+        const keySelectDropdown = document.getElementById('key-select-dropdown');
+        const addSongBtn = document.getElementById('add-song-to-setlist-btn');
+        const tableOneBody = document.querySelector('#tableone tbody'); // Get table one body reference
+
+        // --- Functions ---
+
+        /**
+         * Fetches the current setlist from Supabase.
+         */
+        async function loadSetlistFromSupabase()
+        {
+            // Check if Supabase client initialized successfully AND if the UI elements exist
+            if (!supabase || !currentSetlistItemsUl || !tableOneBody)
+            {
+                console.warn("Supabase client not ready or required UI elements missing. Cannot load setlist.");
+                // Show appropriate message in table one if element exists
+                if (tableOneBody) tableOneBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Setlist feature unavailable (config error).</td></tr>';
+                if (currentSetlistItemsUl) currentSetlistItemsUl.innerHTML = '<li>Setlist unavailable</li>';
+                return;
+            }
+
+            console.log("Loading setlist from Supabase...");
+            currentSetlistItemsUl.innerHTML = '<li>Loading...</li>'; // Show loading state in modal
+            tableOneBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Loading setlist...</td></tr>'; // Show loading state in table
+
+            try
+            {
+                const { data, error, status } = await supabase
+                    .from('setlists')
+                    .select('songs')
+                    .eq('label', setlistLabel)
+                    .single();
+
+                if (error)
+                {
+                    if (status === 406 || error.code === 'PGRST116')
+                    {
+                        console.warn(`Setlist row with label "${setlistLabel}" not found.`);
+                        currentSetlist = [];
+                    } else
+                    {
+                        throw error;
+                    }
+                } else if (data && data.songs)
+                {
+                    currentSetlist = Array.isArray(data.songs) ? data.songs : [];
+                    console.log("Setlist loaded:", currentSetlist);
+                } else
+                {
+                    currentSetlist = [];
+                    console.warn("Setlist row found but 'songs' data is missing or not an array, defaulting to empty.");
+                }
+
+            } catch (error)
+            {
+                console.error('Error loading setlist:', error);
+                currentSetlist = []; // Reset to empty on error
+                if (currentSetlistItemsUl) currentSetlistItemsUl.innerHTML = '<li>Error loading setlist.</li>';
+                if (tableOneBody) tableOneBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Error loading setlist.</td></tr>';
+            } finally
+            {
+                // Always render the UI based on the final state of currentSetlist
+                if (currentSetlistItemsUl) renderSetlistUI();
+                // Update table one AFTER potentially updating currentSetlist
+                if (tableOneBody) updateTableOneWithSetlist();
+            }
+        }
+
+        /**
+         * Saves the current in-memory setlist array to Supabase.
+         */
+        async function saveSetlistToSupabase()
+        {
+            if (!supabase)
+            {
+                alert('Cannot save setlist: Supabase connection issue.');
+                return;
+            }
+            // Ensure currentSetlist is an array before saving
+            if (!Array.isArray(currentSetlist))
+            {
+                console.error("Attempted to save non-array data as setlist. Aborting.", currentSetlist);
+                alert("Error: Invalid setlist data. Cannot save.");
+                return; // Prevent saving invalid data
+            }
+            console.log("Saving setlist to Supabase:", currentSetlist);
+
+            try
+            {
+                const { error } = await supabase
+                    .from('setlists')
+                    .update({ songs: currentSetlist })
+                    .eq('label', setlistLabel);
+
+                if (error) throw error;
+
+                console.log('Setlist saved successfully.');
+
+            } catch (error)
+            {
+                console.error('Error saving setlist:', error);
+                alert('Failed to save setlist. Please check console for details.');
+                // Consider reloading data to ensure consistency after a failed save
+                // await loadSetlistFromSupabase();
+            }
+        }
+
+        /**
+         * Renders the current setlist items in the modal UI.
+         */
+        function renderSetlistUI()
+        {
+            if (!currentSetlistItemsUl) return; // Exit if element doesn't exist
+            currentSetlistItemsUl.innerHTML = ''; // Clear previous items
+
+            if (!Array.isArray(currentSetlist) || currentSetlist.length === 0)
+            {
+                currentSetlistItemsUl.innerHTML = '<li>Setlist is empty.</li>';
+                return;
+            }
+
+            currentSetlist.forEach((item, index) =>
+            {
+                // Basic validation of item structure
+                const displayName = item?.displayName ?? 'Unknown Song';
+                const key = item?.key ?? '?';
+
+                const listItem = document.createElement('li');
+                const span = document.createElement('span');
+                span.textContent = `${displayName} (${key})`; // Use textContent for safety
+
+                const button = document.createElement('button');
+                button.className = 'remove-song-btn';
+                button.dataset.index = index;
+                button.textContent = 'Remove';
+
+                listItem.appendChild(span);
+                listItem.appendChild(button);
+                currentSetlistItemsUl.appendChild(listItem);
+            });
+        }
+
+        /**
+        * Updates the #tableone UI to display the current setlist.
+        */
+        function updateTableOneWithSetlist()
+        {
+            if (!tableOneBody)
+            { // Check if element exists
+                console.error("#tableone tbody not found!");
+                return;
+            }
+
+            tableOneBody.innerHTML = ''; // Clear existing rows
+
+            if (!Array.isArray(currentSetlist) || currentSetlist.length === 0)
+            {
+                tableOneBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Setlist is empty. Add songs using the button above.</td></tr>';
+                return;
+            }
+
+            currentSetlist.forEach(item =>
+            {
+                // Destructure with defaults for safety
+                const { songName, displayName = 'Unknown Song', key = '?' } = item || {};
+
+                if (!songName)
+                {
+                    console.warn("Skipping setlist item due to missing songName:", item);
+                    return; // Skip item if essential data is missing
+                }
+
+                const row = tableOneBody.insertRow();
+
+                const cellName = row.insertCell();
+                cellName.textContent = displayName;
+
+                const cellChords = row.insertCell();
+                const chordLink = document.createElement('a');
+                chordLink.href = '#';
+                chordLink.textContent = `Chords (${key})`; // Show the selected key
+                chordLink.dataset.songName = songName;
+                chordLink.dataset.contentType = 'chords';
+                cellChords.appendChild(chordLink);
+                cellChords.style.textAlign = 'center';
+                cellChords.style.width = '20%';
+
+
+                const cellLyrics = row.insertCell();
+                const lyricLink = document.createElement('a');
+                lyricLink.href = '#';
+                lyricLink.textContent = 'Lyrics';
+                lyricLink.dataset.songName = songName;
+                lyricLink.dataset.contentType = 'lyrics';
+                cellLyrics.appendChild(lyricLink);
+                cellLyrics.style.textAlign = 'center';
+                cellLyrics.style.width = '20%';
+            });
+            // Event listeners handled by delegation attached to document.body
+        }
+
+        /**
+         * Populates the "Add Song" dropdown from the main song table (#tabletwo).
+         */
+        function populateSongDropdown()
+        {
+            const songTable = document.getElementById('tabletwo');
+            // Ensure dropdown and table exist
+            if (!songSelectDropdown || !songTable) return;
+            const tableBody = songTable.querySelector('tbody');
+            if (!tableBody) return;
+            const tableRows = tableBody.querySelectorAll('tr');
+
+            // Clear existing options except the placeholder
+            songSelectDropdown.innerHTML = '<option value="">-- Select a Song --</option>';
+
+            tableRows.forEach(row =>
+            {
+                if (row.cells.length < 3) return; // Skip malformed rows
+
+                const songNameCell = row.cells[0];
+                const chordsCell = row.cells[1];
+                const lyricsCell = row.cells[2];
+
+                let songFileIdentifier = '';
+                let displayName = (songNameCell.textContent || songNameCell.innerText || '').trim();
+
+                // Find the data-song-name from the links
+                const chordLink = chordsCell.querySelector('a[data-song-name]');
+                if (chordLink)
+                {
+                    songFileIdentifier = chordLink.dataset.songName;
+                } else
+                {
+                    const lyricsLink = lyricsCell.querySelector('a[data-song-name]');
+                    if (lyricsLink) songFileIdentifier = lyricsLink.dataset.songName;
+                }
+
+                // Add to dropdown only if we have both a display name and a file identifier
+                if (songFileIdentifier && displayName)
+                {
+                    const option = document.createElement('option');
+                    option.value = songFileIdentifier;
+                    option.textContent = displayName;
+                    option.dataset.displayName = displayName;
+                    songSelectDropdown.appendChild(option);
+                } else if (displayName && displayName !== 'NAME OF SONG')
+                {
+                    console.warn(`Could not find file identifier (data-song-name link) for table row starting with: ${displayName}`);
+                }
+            });
+        }
+
+        // --- Event Listeners ---
+
+        // Open Modal
+        if (openModalBtn)
+        {
+            openModalBtn.addEventListener('click', () =>
+            {
+                if (modal && supabase)
+                { // Only open if modal exists and supabase is ready
+                    modal.style.display = 'block';
+                    // Load latest setlist data ONLY when opening the modal
+                    loadSetlistFromSupabase(); // Re-fetch fresh data on open
+                } else if (!supabase)
+                {
+                    alert("Setlist feature is unavailable (Supabase connection failed).");
+                }
+            });
+        } else
+        {
+            console.warn("Open modal button not found.");
+        }
+
+        // Close Modal Button
+        if (closeModalBtn)
+        {
+            closeModalBtn.addEventListener('click', () =>
+            {
+                if (modal) modal.style.display = 'none';
+                // Update tableone when modal is closed to reflect potential changes
+                updateTableOneWithSetlist();
+            });
+        }
+
+        // Close Modal on outside click (Backdrop)
+        window.addEventListener('click', (event) =>
+        {
+            if (modal && event.target == modal)
+            {
+                modal.style.display = 'none';
+                // Update tableone when modal is closed to reflect potential changes
+                updateTableOneWithSetlist();
+            }
+        });
+
+        // Add Song Button (inside modal)
+        if (addSongBtn)
+        {
+            addSongBtn.addEventListener('click', async () =>
+            {
+                if (!songSelectDropdown || !keySelectDropdown) return;
+
+                const selectedSongOption = songSelectDropdown.options[songSelectDropdown.selectedIndex];
+                const songFileIdentifier = selectedSongOption.value;
+                const displayName = selectedSongOption.dataset.displayName || selectedSongOption.textContent;
+                const selectedKey = keySelectDropdown.value;
+
+                if (!songFileIdentifier)
+                {
+                    alert('Please select a song.');
+                    return;
+                }
+                // Ensure currentSetlist is an array
+                if (!Array.isArray(currentSetlist)) currentSetlist = [];
+
+                const exists = currentSetlist.some(item => item && item.songName === songFileIdentifier);
+                if (exists)
+                {
+                    alert(`"${displayName}" is already in the setlist.`);
+                    return;
+                }
+
+                currentSetlist.push({
+                    songName: songFileIdentifier,
+                    displayName: displayName,
+                    key: selectedKey
+                });
+
+                renderSetlistUI(); // Update modal list
+                await saveSetlistToSupabase(); // Save to DB
+                // Don't update tableone here - wait until modal closes
+
+                songSelectDropdown.selectedIndex = 0;
+                keySelectDropdown.selectedIndex = 0;
+            });
+        } else
+        {
+            console.warn("Add song button not found.");
+        }
+
+        // Remove Song Button (using event delegation on the UL in modal)
+        if (currentSetlistItemsUl)
+        {
+            currentSetlistItemsUl.addEventListener('click', async (event) =>
+            {
+                if (event.target.classList.contains('remove-song-btn'))
+                {
+                    const indexToRemove = parseInt(event.target.dataset.index, 10);
+
+                    if (!Array.isArray(currentSetlist)) currentSetlist = []; // Safety check
+
+                    if (!isNaN(indexToRemove) && indexToRemove >= 0 && indexToRemove < currentSetlist.length)
+                    {
+                        const removedItem = currentSetlist.splice(indexToRemove, 1);
+                        console.log("Removed:", removedItem[0]?.displayName ?? 'item');
+
+                        renderSetlistUI(); // Update modal list
+                        await saveSetlistToSupabase(); // Save to DB
+                        // Don't update tableone here - wait until modal closes
+                    } else
+                    {
+                        console.error("Invalid index for removal:", event.target.dataset.index);
+                    }
+                }
+            });
+        } else
+        {
+            console.warn("Current setlist UL element not found.");
+        }
+
+        // --- MODIFIED handleSongClick (for links in tableone and tabletwo) ---
+        async function handleSongClick(event, linkElement)
+        { // Accepts event and the link
+            event.preventDefault(); // Prevent default link navigation
+
+            const songName = linkElement.dataset.songName;
+            const contentType = linkElement.dataset.contentType;
+
+            if (!songName || !contentType)
+            {
+                console.error("Link is missing data-song-name or data-content-type", linkElement);
+                return;
+            }
+
+            const songURL = `./assets/${contentType}/${songName}.txt`;
+            const templateURL = "./assets/master/template.html"; // Adjust path if necessary
+
+            try
+            {
+                // Fetch the song content
+                let songContent = '';
+                try
+                {
+                    const response = await fetch(songURL);
+                    if (!response.ok) throw new Error(`Initial fetch failed: ${response.statusText}`);
+                    songContent = await response.text();
+                } catch (initialError)
+                {
+                    console.warn(`Failed to fetch from ${songURL}, trying fallback...`, initialError);
+                    const fallbackSongURL = `./${songName}.txt`;
+                    try
+                    {
+                        const fallbackResponse = await fetch(fallbackSongURL);
+                        if (!fallbackResponse.ok) throw new Error(`Fallback fetch failed: ${fallbackResponse.statusText}`);
+                        songContent = await fallbackResponse.text();
+                        console.log(`Successfully fetched from fallback: ${fallbackSongURL}`);
+                    } catch (fallbackError)
+                    {
+                        throw new Error(`Failed to load song content for ${songName} from multiple paths. Error: ${fallbackError.message}`);
+                    }
+                }
+
+                // Check the loaded setlist for the key
+                let selectedKey = null;
+                if (Array.isArray(currentSetlist) && currentSetlist.length > 0)
+                {
+                    const setlistItem = currentSetlist.find(item => item && item.songName === songName);
+                    if (setlistItem)
+                    {
+                        selectedKey = setlistItem.key;
+                        console.log(`Song ${songName} found in setlist. Using key: ${selectedKey}`);
+                    }
+                }
+
+                const dataToStore = {
+                    name: songName,
+                    type: contentType,
+                    content: songContent
+                };
+
+                // Add key ONLY if found in setlist (regardless of which table was clicked)
+                if (selectedKey)
+                {
+                    dataToStore.selectedKey = selectedKey;
+                } else
+                {
+                    console.log(`Song ${songName} not in current setlist, key will default in template.`);
+                }
+
+                sessionStorage.setItem('songData', JSON.stringify(dataToStore));
+                window.location.href = templateURL;
+
+            } catch (error)
+            {
+                console.error("Error in handleSongClick: ", error);
+                alert(`Error loading content: ${error.message}`);
+            }
+        }
+
+        // --- Search Function ---
         function myFunction()
         {
-            var input, filter, table, tr, td, i, txtValue;
+            var input, filter, table, tbody, tr, td, i, txtValue;
             input = document.getElementById("myInput");
+            if (!input) return; // Exit if input doesn't exist
             filter = input.value.toUpperCase();
             table = document.getElementById("tabletwo");
-            tr = table.getElementsByTagName("tr");
+            if (!table) return; // Exit if table doesn't exist
+            tbody = table.querySelector("tbody");
+            if (!tbody) return;
+            tr = tbody.getElementsByTagName("tr");
+
             for (i = 0; i < tr.length; i++)
             {
                 td = tr[i].getElementsByTagName("td")[0];
@@ -1278,61 +1821,42 @@
             }
         }
 
-        // Fetching and Redirection Logic (Keep As Is)
-        document.addEventListener('DOMContentLoaded', function ()
+        // --- Initial Setup on Page Load ---
+        document.addEventListener('DOMContentLoaded', () =>
         {
-            var songLinks = document.querySelectorAll('table a');
-            songLinks.forEach(link => link.addEventListener('click', handleSongClick));
 
-            function handleSongClick(event)
+            // Attach search function listener if not done in HTML
+            const searchInput = document.getElementById("myInput");
+            if (searchInput && !searchInput.hasAttribute('onkeyup'))
             {
-                event.preventDefault(); // Prevent default link behavior
-                var songName = event.target.dataset.songName;
-                var contentType = event.target.dataset.contentType; // 'chords' or 'lyrics'
-                // Assuming 'chords' files contain NNS, 'lyrics' might just be words
-                // Adjust URL path as necessary
-                var songURL = `./assets/${contentType}/${songName}.txt`;
-                var templateURL = "./assets/master/template.html"; // Path to your template file
-
-                // Fetch the song content (NNS or lyrics)
-                fetch(songURL)
-                    .then(response =>
-                    {
-                        if (!response.ok)
-                        {
-                            // Try fetching from the root if not found in assets/chords or assets/lyrics
-                            songURL = `./${songName}.txt`;
-                            return fetch(songURL).then(res =>
-                            {
-                                if (!res.ok) throw new Error(`Failed to load song content for ${songName} from multiple paths`);
-                                return res.text();
-                            });
-                        }
-                        return response.text();
-                    })
-                    .then(songContent =>
-                    {
-                        // Store content in sessionStorage for template.html to access
-                        // Using sessionStorage is often cleaner than huge URL parameters
-                        sessionStorage.setItem('songData', JSON.stringify({
-                            name: songName,
-                            type: contentType,
-                            content: songContent
-                        }));
-                        // Navigate to template.html
-                        window.location.href = templateURL;
-                    })
-                    .catch(error =>
-                    {
-                        console.error("Error loading song: ", error);
-                        // Display error nicely if needed
-                        alert(`Error loading content: ${error.message}`);
-                    });
+                searchInput.addEventListener('keyup', myFunction);
             }
+
+            // Populate the song dropdown for the modal (needs tabletwo to be loaded)
+            populateSongDropdown();
+
+            // Load the initial setlist data from Supabase
+            // This function now also calls updateTableOneWithSetlist in its finally block
+            loadSetlistFromSupabase();
+
+            // Add Event Delegation for ALL Song Links in Table One and Table Two
+            document.body.addEventListener('click', (event) =>
+            {
+                const link = event.target.closest('a[data-song-name]');
+                if (link)
+                {
+                    const parentTable = link.closest('#tableone, #tabletwo');
+                    if (parentTable)
+                    {
+                        handleSongClick(event, link); // Call handler with event and link
+                    }
+                }
+            });
+
+            console.log("DOM fully loaded and parsed, initial setup complete.");
         });
 
     </script>
-
 </body>
 
 </html>

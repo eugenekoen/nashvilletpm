@@ -256,26 +256,85 @@ function displayConvertedSong(targetKey)
  * @param {string} contentElementId - The ID of the HTML element to display the song in (e.g., 'song-content').
  * @param {string} keysContainerId - The ID of the HTML element containing the key buttons.
  */
-function setupNashvilleTranspose(nnsContent, contentElementId, keysId)
+function setupNashvilleTranspose(nnsContent, contentElementId, keysId, initialKey = null)
 {
-    originalNnsContent = nnsContent; // Store globally for this song
+    console.log(`setupNashvilleTranspose: Called. Received initialKey parameter = ${initialKey}`); // Log entry point and received key
+
+    // Store globally needed variables for this song instance
+    originalNnsContent = nnsContent;
     songContentElementId = contentElementId;
     keysContainerElementId = keysId;
 
     const keysContainer = document.getElementById(keysContainerElementId);
+    const displayElement = document.getElementById(songContentElementId);
+
     if (!keysContainer)
     {
-        console.error("Keys container element not found:", keysContainerElementId);
-        // Display original NNS if keys can't be generated
-        const displayElement = document.getElementById(songContentElementId);
+        console.error("setupNashvilleTranspose: Keys container element not found:", keysContainerElementId);
         if (displayElement) displayElement.textContent = originalNnsContent;
         return;
     }
+    if (!displayElement)
+    {
+        console.error("setupNashvilleTranspose: Song content display element not found:", contentElementId);
+        return;
+    }
 
-    // Clear any existing buttons
-    keysContainer.innerHTML = '';
+    keysContainer.innerHTML = ''; // Clear existing buttons
 
-    // Generate Key Buttons
+    let keyToSelect = null; // Start with null, determine the key to use
+
+    // --- Determine the Key to Select ---
+    // 1. Prioritize the passed initialKey if it's valid
+    if (initialKey && typeof initialKey === 'string' && initialKey.trim() !== '')
+    {
+        console.log(`setupNashvilleTranspose: Checking validity of provided initialKey "${initialKey}"...`);
+        if (displayKeys.includes(initialKey))
+        {
+            keyToSelect = initialKey;
+            console.log(`setupNashvilleTranspose: Using valid initialKey "${keyToSelect}" passed from template.`);
+        } else
+        {
+            console.warn(`setupNashvilleTranspose: Provided initialKey "${initialKey}" is NOT in displayKeys array. Ignoring it.`);
+        }
+    } else
+    {
+        console.log("setupNashvilleTranspose: No valid initialKey provided.");
+    }
+
+    // 2. If no valid initialKey was found, try detecting from content
+    if (!keyToSelect)
+    {
+        console.log("setupNashvilleTranspose: Attempting to detect key from NNS content...");
+        const keyMatch = nnsContent.match(/^Original Key:\s*([A-G][b#]?)/im);
+        if (keyMatch && keyMatch[1])
+        {
+            const detectedKey = keyMatch[1];
+            console.log(`setupNashvilleTranspose: Detected "Original Key: ${detectedKey}" in content.`);
+            // Validate the detected key too
+            if (displayKeys.includes(detectedKey))
+            {
+                keyToSelect = detectedKey;
+                console.log(`setupNashvilleTranspose: Using valid detected key "${keyToSelect}".`);
+            } else
+            {
+                console.warn(`setupNashvilleTranspose: Detected key "${detectedKey}" is NOT in displayKeys array. Will use default.`);
+            }
+        } else
+        {
+            console.log("setupNashvilleTranspose: No 'Original Key:' line found in content.");
+        }
+    }
+
+    // 3. If still no key, use the default (e.g., C or last in list)
+    if (!keyToSelect)
+    {
+        const defaultKey = displayKeys.includes('C') ? 'C' : (displayKeys[displayKeys.length - 1] || 'C');
+        keyToSelect = defaultKey;
+        console.log(`setupNashvilleTranspose: No specific key determined, defaulting to "${keyToSelect}".`);
+    }
+
+    // --- Generate Key Buttons ---
     displayKeys.forEach(key =>
     {
         const keyButton = document.createElement('a');
@@ -284,14 +343,69 @@ function setupNashvilleTranspose(nnsContent, contentElementId, keysId)
         keyButton.addEventListener('click', (event) =>
         {
             event.preventDefault();
-            displayConvertedSong(key);
+            // Pass false for isInitialLoad on subsequent clicks
+            displayConvertedSong(key, false);
         });
         keysContainer.appendChild(keyButton);
     });
 
-    // Initial Display (e.g., default to C or first key in the list)
-    const initialKey = displayKeys[displayKeys.length - 1] || 'C'; // Default to C
-    displayConvertedSong(initialKey);
+    // --- Initial Display ---
+    console.log(`setupNashvilleTranspose: Performing initial displayConvertedSong with final key: "${keyToSelect}"`);
+    // Ensure displayConvertedSong exists before calling
+    if (typeof displayConvertedSong === 'function')
+    {
+        displayConvertedSong(keyToSelect, true); // Pass true for isInitialLoad
+    } else
+    {
+        console.error("setupNashvilleTranspose: displayConvertedSong function is not defined!");
+        if (displayElement) displayElement.textContent = "Error: Display function missing.";
+    }
+}
+
+// (Make sure the displayConvertedSong function is also present in nashville.js as previously provided)
+/**
+ * Updates the song display area with converted chords.
+ * @param {string} targetKey - The key to convert to.
+ * @param {boolean} isInitialLoad - Flag to indicate if this is the first load with a pre-selected key.
+ */
+function displayConvertedSong(targetKey, isInitialLoad = false)
+{
+    const displayElement = document.getElementById(songContentElementId);
+    const keysContainer = document.getElementById(keysContainerElementId);
+
+    // Ensure elements exist and we have content
+    if (!displayElement || !keysContainer || typeof originalNnsContent !== 'string')
+    {
+        console.error("displayConvertedSong: Cannot display - missing element or original content.");
+        return;
+    }
+    // Ensure targetKey is valid
+    if (!displayKeys.includes(targetKey))
+    {
+        console.error(`displayConvertedSong: Invalid targetKey "${targetKey}" requested.`);
+        return; // Don't try to convert to an invalid key
+    }
+
+    console.log(`displayConvertedSong: Converting to key "${targetKey}". Initial load: ${isInitialLoad}`);
+
+    // Perform the conversion using the core function
+    const chordedString = convertNNSToChords(originalNnsContent, targetKey);
+    displayElement.innerHTML = chordedString; // Update the <pre> tag content
+    // Optional: store current key if needed elsewhere, e.g., displayElement.dataset.currentKey = targetKey;
+
+    // Update selected key button style
+    const buttons = keysContainer.querySelectorAll('a');
+    buttons.forEach(button =>
+    {
+        // Use textContent which should match the key directly
+        if (button.textContent === targetKey)
+        {
+            button.classList.add('selected');
+        } else
+        {
+            button.classList.remove('selected');
+        }
+    });
 }
 
 // Make setup function globally accessible (if needed, or call directly from template.html)

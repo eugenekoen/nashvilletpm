@@ -1,72 +1,74 @@
-  B
+Original Key: B
+
+  1
   GRAVES INTO GARDENS
   -------------------
   
   INTRO
   -----
-  B   E/B   B
+  1   4/1   1
 
   FIRST VERSE
   -----------
-    E/B       B
+    4/1       1
   I searched the world
-      E/B         B
-  But it couldn’t fill me
-               G#m
+      4/1         1
+  But it couldn’t fill me Blue
+               6m
   Man’s empty praise
-                     F#
+                     5
   and treasures that fade
-             E
+             4
   Are never enough
 
   SECOND VERSE
   ------------
-                 B
+                 1
   Then You came along
-    E/B               B
+    4/1               1
   And put me back together
-             G#m               F#
+             6m               5
   And every desire is now satisfied
-             E
+             4
   Here in Your love
 
   CHORUS
   ------
-              B
+              1
   Oh there’s nothing better than You
-          G#m
+          6m
   There’s nothing better than You
-                E
+                4
   Lord there’s nothing, nothing is better
-       B
+       1
   than You
 
   INTERLUDE
   ---------
-  B   E/B
+  1   4/1
 
   THIRD VERSE
-           B
+           1
   I’m not afraid
-     E              B
+     4              1
   To show You my weakness
-                  G#m
+                  6m
   My failures and flaws
-                        F#
+                        5
   Lord You’ve seen them all
-                        E
+                        4
   And You still call me friend
 
   FOURTH VERSE
-                         B
+                         1
   ‘Cause the God of the mountain
-         C#m         B
+         2m         1
   Is the God of the valley
-                G#m
+                6m
   There’s not a place
-                 F#
+                 5
   Your mercy and grace
-                E
+                4
   Won’t find me again
 
   CHORUS x2
@@ -75,24 +77,24 @@
 
   BRIDGE 1
   --------
-  B                               E  B
+  1                               4  1
     You turn mourning to dancing
-                            E  B
+                            4  1
   You give beauty for ashes
   You turn shame into glory
-             G#m  E       B
+             6m  4       1
   You’re the only one who can (repeat line)
 
   BRIDGE 2
   --------
-  B                              E  B
+  1                              4  1
     You turn graves into gardens
-                             E  B
+                             4  1
   You turn bones into armies
   You turn seas into highways
-             G#m  E       B
+             6m  4       1
   You’re the only one who can
-             G#m  E       B
+             6m  4       1
   You’re the only one who can
 
   CHORUS X2
@@ -101,10 +103,10 @@
 
   TAG
   ---
-             G#m  E        B
+             6m  4        1
   You’re the only one who can
 
-  B   E   B   E   B
+  1   4   1   4   1
   ================================================
 
 
